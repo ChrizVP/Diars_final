@@ -1,0 +1,71 @@
+﻿@model IEnumerable<CapaEntidades.EntServicioadicional>
+@using CapaEntidades;
+@{
+    ViewBag.Title = "Servicios";
+    Layout = "~/Views/Shared/_LayoutMantenedores.cshtml";
+    EntCuenta cuenta = (EntCuenta)ViewBag.Cuenta;
+}
+
+@section Scripts
+{
+    <script>
+        $("#limpiar").empty()
+
+        $("#userInfo").append(`
+                <!-- Cuando la sesion esta iniciada-->
+                        <ul>
+                            <li class="">
+                                <div class="header_login">
+                                    <a href="#" data-toggle="dropdown" aria-expanded="false">
+                                        <img src="https://png.pngtree.com/element_origin_min_pic/16/11/25/f2db5b1fae65676bfd1ecae1dbfdc3a2.jpg" alt="" style="border-radius: 50%; height: 45px; width: 45px"> @cuenta.Recep.UserName
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right" style="background-color: rgba(14,9,35,0.88);">
+                                        <li><a href="#" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-user"> Perfil </i></a></li>
+                                        <li><a href="@Url.Action("MisReservas", "AnularReserva")" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-list"> Mis Reservas </i></a></li>
+                                        <li><a href="@Url.Action("CerrarSesion", "Login")" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-sign-out"> Cerrar Sesión </i></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+            `)
+        //$("a#adminName").attr("href", "/Login/CerrarSesion")
+    </script>
+}
+
+<section class="container" id="listarServicios">
+    <div class="pb-4 form-header no-color">
+        <a class="btn btn-myBtn" href="/MantenedorServicios/insertarServicio">Nuevo servicio</a>
+    </div>
+    <table class="table m-auto col-8 table-striped table-dark">
+        <tr>
+            <th>
+                Servicio
+            </th>
+            <th>
+                ID
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreDeServicio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServicioID)
+                </td>
+                <td class="options">
+                    @Html.ActionLink("Edit", "editarServicio", new { ServicioID = item.ServicioID }, new { @class = "d-block col-6 mb-2 link-master btn btn-myBtn" })
+                    @Html.ActionLink("Delete", "eliminarServicio", new { ServicioID = item.ServicioID }, new { @class = "d-block col-6 mb-2 link-master btn btn-MyDanger" })
+                </td>
+            </tr>
+        }
+
+    </table>
+</section>
+

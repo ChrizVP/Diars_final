@@ -1,0 +1,109 @@
+﻿@model IEnumerable<CapaEntidades.EntHabitacion>
+@using CapaEntidades;
+@{
+    ViewBag.Title = "listarHabitaciones";
+    Layout = "~/Views/Shared/_LayoutMantenedores.cshtml";
+    EntCuenta cuenta = (EntCuenta)ViewBag.Cuenta;
+}
+
+@section Scripts
+{
+    <script>
+        $("#limpiar").empty()
+
+       $("#userInfo").append(`
+                <!-- Cuando la sesion esta iniciada-->
+                        <ul>
+                            <li class="">
+                                <div class="header_login">
+                                    <a href="#" data-toggle="dropdown" aria-expanded="false">
+                                        <img src="https://png.pngtree.com/element_origin_min_pic/16/11/25/f2db5b1fae65676bfd1ecae1dbfdc3a2.jpg" alt="" style="border-radius: 50%; height: 45px; width: 45px"> @cuenta.Recep.UserName
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right" style="background-color: rgba(14,9,35,0.88);">
+                                        <li><a href="#" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-user"> Perfil </i></a></li>
+                                        <li><a href="@Url.Action("MisReservas", "AnularReserva")" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-list"> Mis Reservas </i></a></li>
+                                        <li><a href="@Url.Action("CerrarSesion", "Login")" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-sign-out"> Cerrar Sesión </i></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+            `)
+        //$("a#adminName").attr("href", "/Login/CerrarSesion")
+    </script>
+}
+
+<section class="container" id="listarHabitaciones">
+    <div class="pb-4 form-header no-color">
+        <a class="btn btn-myBtn" href="/MantenedorHabitaciones/insertarHabitacion">Nueva habitación</a>
+    </div>
+
+    <table class="table m-auto col-15 table-striped table-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroHabitacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipodehabitacion.Nombretipodehabitacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipodehabitacion.Numerodecamas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipodehabitacion.Capacidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipodehabitacion.Precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipodehabitacion.Costoadicional)
+            </th>
+            <th>
+                Servicios
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumeroHabitacion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipodehabitacion.Nombretipodehabitacion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipodehabitacion.Numerodecamas)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipodehabitacion.Capacidad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipodehabitacion.Precio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipodehabitacion.Costoadicional)
+                </td>
+
+                <td>
+                    @{
+                        string servicios = string.Join
+                        (
+                            ", ",
+                            (from row in item.Tipodehabitacion.ServiciosAdicionales
+                             select row.NombreDeServicio).ToArray()
+                        );
+                        @servicios.ToString()
+                    }
+                </td>
+                <td class="options">
+                    @Html.ActionLink("Edit", "editarHabitacion", new { NumeroHabitacion = item.NumeroHabitacion }, new { @class = "d-block mb-2 link-master btn btn-myBtn" })
+                </td>
+            </tr>
+        }
+
+    </table>
+</section>

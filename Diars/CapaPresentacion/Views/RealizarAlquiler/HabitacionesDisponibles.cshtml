@@ -1,0 +1,190 @@
+﻿@model CapaEntidades.EntAlquilerViewModel
+@using CapaEntidades;
+@using System.Globalization;
+@{
+    ViewBag.Title = "HabitacionesDisponibles";
+    Layout = "~/Views/Shared/_LayoutMantenedores.cshtml";
+    EntAlquiler alquiler = Model.Alquiler;
+    EntCuenta cuenta = (EntCuenta)ViewBag.Cuenta;
+    string cultureName = "en-US";
+    var culture = new CultureInfo(cultureName);
+}
+
+@section Scripts
+{
+    @Styles.Render("~/bundles/js")
+    <script>
+        $("#limpiar").empty()
+
+        $("#userInfo").append(`
+                <!-- Cuando la sesion esta iniciada-->
+                        <ul>
+                            <li class="">
+                                <div class="header_login">
+                                    <a href="#" data-toggle="dropdown" aria-expanded="false">
+                                        <img src="https://png.pngtree.com/element_origin_min_pic/16/11/25/f2db5b1fae65676bfd1ecae1dbfdc3a2.jpg" alt="" style="border-radius: 50%; height: 45px; width: 45px"> @cuenta.Recep.UserName
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right" style="background-color: rgba(14,9,35,0.88);">
+                                        <li><a href="#" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-user"> Perfil </i></a></li>
+                                        <li><a href="@Url.Action("MisReservas", "AnularReserva")" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-list"> Mis Reservas </i></a></li>
+                                        <li><a href="@Url.Action("CerrarSesion", "Login")" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-sign-out"> Cerrar Sesión </i></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+            `)
+    </script>
+}
+
+
+<!-- Booking -->
+
+<div class="booking mb-4">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="booking_container d-flex flex-row align-items-end justify-content-start">
+                    <form action="/RealizarAlquiler/HabitacionesDisponibles" method="post" class="booking_form">
+                        <div class="booking_form_container d-flex flex-lg-row flex-column align-items-start justify-content-start flex-wrap">
+                            <input type="hidden" name="txtdni" value="@Model.Alquiler.Huesped.Dni" />
+                            <div class="booking_form_inputs d-flex flex-row align-items-start justify-content-between flex-wrap">
+                                <div class="booking_dropdown"><input type="text" name="txtCheckIn" class="booking_input booking_input_a booking_in" disabled="disabled" value="@DateTime.Today.ToString("d",culture)"></div>
+                                <div class="booking_dropdown"><input type="text" name="txtCheckOut" class="datepicker booking_input booking_input_a booking_out" placeholder="Check out" required="required"></div>
+                                <div class="custom-select">
+                                    <select name="selectAdultos">
+                                        <option value="0">Adultos</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                                <div class="custom-select">
+                                    <select name="selectKids">
+                                        <option value="0">Niños</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <button class="booking_form_button ml-lg-auto">Alquilar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="m-auto text-center">Habitaciones Disponibles</h2>
+
+
+@if (Model.ErrorID == 0)
+{
+    <div class="alert alert-danger text-center mt-4">
+        Ingrese una fecha válida
+    </div>
+}
+@if (Model.ErrorID == 1)
+{
+    <div class="alert alert-danger text-center mt-4">
+        La diferencia de fechas no debe ser mayor a 28
+    </div>
+}
+
+@if (Model.ErrorID == 2)
+{
+    <div class="alert alert-danger text-center mt-4">
+        Ingrese al menos un adulto
+    </div>
+}
+@if (Model.ErrorID == 3)
+{
+    <div class="alert alert-danger text-center mt-4">
+        Máximo 6 personas
+    </div>
+}
+
+@if (Model.Habitaciones != null && Model.ErrorID < 0 && Model.Habitaciones.Count != 0)
+{
+    @section Scripts
+    {
+        <script>
+            $("#limpiar").empty()
+        </script>
+
+    }
+    <div class="container">
+        <!-- Room -->
+        <div class="rooms">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="card-columns">
+                            @foreach (var item in Model.Habitaciones)
+                            {
+
+                                <div class="card">
+                                    @switch (item.Tipodehabitacion.Nombretipodehabitacion)
+                                    {
+                                        case "Simple":
+                                            <img class="card-img-top" src="~/Bootstrap/images/room_1.jpg" alt="Room image description">
+                                            break;
+                                        case "Matrimonial":
+                                            <img class="card-img-top" src="~/Bootstrap/images/offer_4.jpg" alt="Room image description">
+                                            break;
+                                        case "Doble":
+                                            <img class="card-img-top" src="~/Bootstrap/images/room_3.jpg" alt="Room image description">
+                                            break;
+                                        case "Triple":
+                                            <img class="card-img-top" src="~/Bootstrap/images/room_4.jpg" alt="Room image description">
+                                            break;
+                                        case "Múltiple":
+                                            <img class="card-img-top" src="~/Bootstrap/images/room_2.jpg" alt="Room image description">
+                                            break;
+                                    }
+                                    <div class="card-body">
+                                        <div class="rooms_title"><h2>@item.Tipodehabitacion.Nombretipodehabitacion: @item.NumeroHabitacion </h2></div>
+                                        <div class="rooms_list">
+                                            @foreach (var serv in item.Tipodehabitacion.ServiciosAdicionales)
+                                            {
+                                                <ul>
+                                                    <li class="d-flex flex-row align-items-center justify-content-start">
+                                                        <img src="~/Bootstrap/images/check.png" alt="">
+                                                        <span>@serv.NombreDeServicio</span>
+                                                    </li>
+                                                </ul>
+                                            }
+
+                                        </div>
+                                        <div class="rooms_price">S/.@item.Tipodehabitacion.Precio<span>Noche</span></div>
+                                        <div class="button rooms_button">
+                                            @Html.ActionLink("RESERVAR", "RealizarReserva", new { NumeroHabitacion = item.NumeroHabitacion,dni = alquiler.Huesped.Dni,fechaIngreso = alquiler.FechadeIngreso,
+                                  fechaSalida = alquiler.FechadeSalida, cantidadAdultos = alquiler.CantidaAdultos
+                                  , cantidadKids = alquiler.CantidadKids}, new { @class = "d-block mb-2 link-master btn btn-myBtn" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else if (Model.ErrorID < 0)
+{
+
+    <div class="alert alert-danger text-center mt-4">
+        No hay habitaciones disponibles para la fecha seleccionada
+    </div>
+
+}

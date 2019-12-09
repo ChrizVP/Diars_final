@@ -1,0 +1,102 @@
+﻿@model CapaEntidades.EntTipoDeHabitacion
+@using CapaEntidades;
+@{
+    ViewBag.Title = "editarTipoH";
+    Layout = "~/Views/Shared/_LayoutMantenedores.cshtml";
+    EntCuenta cuenta = (EntCuenta)ViewBag.Cuenta;
+}
+
+@section Scripts
+{
+    <script>
+        $("#limpiar").empty()
+        $("#userInfo").append(`
+                <!-- Cuando la sesion esta iniciada-->
+                        <ul>
+                            <li class="">
+                                <div class="header_login">
+                                    <a href="#" data-toggle="dropdown" aria-expanded="false">
+                                        <img src="https://png.pngtree.com/element_origin_min_pic/16/11/25/f2db5b1fae65676bfd1ecae1dbfdc3a2.jpg" alt="" style="border-radius: 50%; height: 45px; width: 45px"> @cuenta.Recep.UserName
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right" style="background-color: rgba(14,9,35,0.88);">
+                                        <li><a href="#" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-user"> Perfil </i></a></li>
+                                        <li><a href="@Url.Action("MisReservas", "AnularReserva")" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-list"> Mis Reservas </i></a></li>
+                                        <li><a href="@Url.Action("CerrarSesion", "Login")" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-sign-out"> Cerrar Sesión </i></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+            `)
+        //$("a#adminName").attr("href", "/Login/CerrarSesion")
+    </script>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <section class="container" id="listarTiposH">
+        <div class="form-content form-horizontal col-5 m-auto">
+            <h4>Editar tipo de habitación</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TipodehabitacionID, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TipodehabitacionID, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    @Html.ValidationMessageFor(model => model.TipodehabitacionID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Capacidad, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Capacidad, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Capacidad, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Nombretipodehabitacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Nombretipodehabitacion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Nombretipodehabitacion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Numerodecamas, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Numerodecamas, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Numerodecamas, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Precio, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Costoadicional, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Costoadicional, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Costoadicional, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-myBtn" />
+                    <a class="ml-3 btn btn-MyDanger" href="/MantenedorTipoHabitacion/listarTiposH">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+

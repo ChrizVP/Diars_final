@@ -1,0 +1,83 @@
+﻿@model CapaEntidades.EntHuesped
+@using CapaEntidades;
+@using System.Globalization;
+@{
+    ViewBag.Title = "Alquilar Habitación";
+    Layout = "~/Views/Shared/_LayoutMantenedores.cshtml";
+    EntCuenta cuenta = (EntCuenta)ViewBag.Cuenta;
+    string cultureName = "en-US";
+    var culture = new CultureInfo(cultureName);
+}
+
+@*@section Header
+{
+    <link href="~/Bootstrap/styles/reservar.css" rel="stylesheet" />
+}*@
+
+@section Scripts
+{
+    @Styles.Render("~/bundles/js")
+    <script>
+        $("#limpiar").empty()
+        $("#userInfo").append(`
+                <!-- Cuando la sesion esta iniciada-->
+                        <ul>
+                            <li class="">
+                                <div class="header_login">
+                                    <a href="#" data-toggle="dropdown" aria-expanded="false">
+                                        <img src="https://png.pngtree.com/element_origin_min_pic/16/11/25/f2db5b1fae65676bfd1ecae1dbfdc3a2.jpg" alt="" style="border-radius: 50%; height: 45px; width: 45px"> @cuenta.Recep.UserName
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right" style="background-color: rgba(14,9,35,0.88);">
+                                        <li><a href="#" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-user"> Perfil </i></a></li>
+                                        <li><a href="@Url.Action("MisReservas", "AnularReserva")" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-list"> Mis Reservas </i></a></li>
+                                        <li><a href="@Url.Action("CerrarSesion", "Login")" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-sign-out"> Cerrar Sesión </i></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+            `)
+    </script>
+}
+<!-- Booking -->
+
+<div class="booking">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="booking_container d-flex flex-row align-items-end justify-content-start">
+                    <form action="/RealizarAlquiler/HabitacionesDisponibles" method="post" class="booking_form">
+                        <div class="booking_form_container d-flex flex-lg-row flex-column align-items-start justify-content-start flex-wrap">
+                            <input type="hidden" name="txtdni" value="@Model.Dni" />
+                            <div class="booking_form_inputs d-flex flex-row align-items-start justify-content-between flex-wrap">
+                                <div class="booking_dropdown"><input type="text" name="txtCheckIn" class="booking_input booking_input_a booking_in" disabled="disabled" value="@DateTime.Today.ToString("d",culture)"></div>
+                                <div class="booking_dropdown"><input type="text" name="txtCheckOut" class="datepicker booking_input booking_input_a booking_out" placeholder="Check out" required="required"></div>
+                                <div class="custom-select">
+                                    <select name="selectAdultos">
+                                        <option value="0">Adultos</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                                <div class="custom-select">
+                                    <select name="selectKids">
+                                        <option value="0">Niños</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <button class="booking_form_button ml-lg-auto">Alquilar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

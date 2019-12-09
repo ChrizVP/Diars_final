@@ -1,0 +1,128 @@
+﻿@model  CapaEntidades.EntReservaViewModel
+@using CapaEntidades
+@using System.Globalization;
+@{
+    ViewBag.Title = "MisReservas";
+    Layout = "~/Views/Shared/_LayoutReservar.cshtml";
+    EntCuenta cuenta = (EntCuenta)ViewBag.Cuenta;
+    string cultureName = "en-US";
+    var culture = new CultureInfo(cultureName);
+}
+
+@if (cuenta != null)
+{
+    @section Scripts
+    {
+    <script>
+        $("#limpiar").empty()
+                $("a#idLogin").remove();
+                $("#userInfo").append(`
+                <!-- Cuando la sesion esta iniciada-->
+                        <ul>
+                            <li class="">
+                                <div class="header_login">
+                                    <a href="#" data-toggle="dropdown" aria-expanded="false">
+                                        <img src="https://png.pngtree.com/element_origin_min_pic/16/11/25/f2db5b1fae65676bfd1ecae1dbfdc3a2.jpg" alt="" style="border-radius: 50%; height: 45px; width: 45px"> @cuenta.Huesped.UserName
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right" style="background-color: rgba(14,9,35,0.88);">
+                                        <li><a href="#" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-user"> Perfil </i></a></li>
+                                        <li><a href="@Url.Action("MisReservas", "AnularReserva")" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-list"> Mis Reservas </i></a></li>
+                                        <li><a href="@Url.Action("CerrarSesion", "Login")" style="padding-left: 17px; padding-bottom: 0;"><i class="fa fa-sign-out"> Cerrar Sesión </i></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+            `)
+    </script>
+    }
+
+    if (Model.ErrorID == 0)
+    {
+        <div class="alert alert-danger text-center mt-4">
+            Aún no tiene reservas
+        </div>
+    }
+
+    if (Model.Reservas != null && Model.ErrorID < 0 && Model.Reservas.Count != 0)
+    {
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    Fecha de reserva
+                </th>
+                <th>
+                    Cantidad de adultos
+                </th>
+                <th>
+                    Cantidad de niños
+                </th>
+                <th>
+                    Fecha de ingreso
+                </th>
+                <th>
+                    Fecha de salida
+                </th>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Estado
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Reservas)
+            {
+                string fechaIngreso = Convert.ToDateTime(item.FechadeIngreso).ToString("d", culture);
+                string fechaSalida = Convert.ToDateTime(item.FechadeSalida).ToString("d", culture);
+                string fechaReserva = Convert.ToDateTime(item.Fechadereserva).ToString("d", culture);
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => fechaReserva)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CantidaAdultos)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CantidadKids)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => fechaIngreso)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => fechaSalida)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReservaID)
+                    </td>
+                    <td>
+                        @if (item.Activa)
+                        {
+                            <span class="badge badge-pill badge-success">
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-pill badge-danger">
+
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Activa)
+                        {
+                            @Html.ActionLink("Anular", "AnularReserva", new { ReservaID = item.ReservaID })
+                        }
+
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+}
+
+
